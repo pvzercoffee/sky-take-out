@@ -111,4 +111,16 @@ public class EmployeeController {
         return Result.success();
     }
 
+    /**
+     * 根据id查询员工
+     * @param id 要查询的id
+     * @return
+     */
+    @ApiOperation("根据id查询员工")
+    @GetMapping("/{id}")
+    //TODO:重新封装一个VO来返回
+    public Result<Employee> queryById(@PathVariable Long id){
+        return Result.success(employeeService.queryById(id));
+    }
+
 }

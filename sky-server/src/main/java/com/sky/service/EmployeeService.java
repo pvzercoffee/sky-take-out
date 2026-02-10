@@ -36,4 +36,11 @@ public interface EmployeeService {
      * @param id 操作对象的id
      */
     void startOrStop(Integer status, Long id);
+
+    /**
+     * 根据id查询员工
+     * @param id 要查询的id
+     * @return
+     */
+    Employee queryById(Long id);
 }
