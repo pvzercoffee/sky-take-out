@@ -90,7 +90,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setCreateUser(BaseContext.getCurrentId());
         employee.setUpdateUser(BaseContext.getCurrentId() );
 
-        employeeMapper.insert(employee);.
+        employeeMapper.insert(employee);
 
 
     }
@@ -107,5 +107,21 @@ public class EmployeeServiceImpl implements EmployeeService {
         Page<Employee> records = employeeMapper.pageQuery(employeePageQueryDTO);
 
         return new PageResult(records.getTotal(),records);
+    }
+
+    /**
+     * 启用、禁用员工账号
+     * @param status 需要设置的状态
+     * @param id 操作对象的id
+     */
+    @Override
+    public void startOrStop(Integer status, Long id) {
+
+        Employee employee = Employee.builder()
+                .id(id)
+                .status(status)
+                .build();
+
+        employeeMapper.update(employee);
     }
 }
