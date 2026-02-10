@@ -90,10 +90,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setCreateUser(BaseContext.getCurrentId());
         employee.setUpdateUser(BaseContext.getCurrentId() );
 
-        employeeMapper.insert(employee);
+        employeeMapper.insert(employee);.
+
 
     }
-
     /**
      * 员工分页查询
      * @param employeePageQueryDTO
