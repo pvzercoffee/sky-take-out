@@ -43,4 +43,6 @@ public interface EmployeeService {
      * @return
      */
     Employee queryById(Long id);
+
+    void editById(EmployeeDTO employeeDTO);
 }
