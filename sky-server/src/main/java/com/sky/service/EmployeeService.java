@@ -15,7 +15,25 @@ public interface EmployeeService {
      */
     Employee login(EmployeeLoginDTO employeeLoginDTO);
 
+    /**
+     * 添加员工
+     * @param employeeLoginDTO
+     */
     void save(EmployeeDTO employeeLoginDTO);
 
+
+    /**
+     * 员工分页查询
+     * @param employeePageQueryDTO
+     * @return
+     */
     PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO);
+
+
+    /**
+     * 启用、禁用员工账号
+     * @param status 需要设置的状态
+     * @param id 操作对象的id
+     */
+    void startOrStop(Integer status, Long id);
 }
