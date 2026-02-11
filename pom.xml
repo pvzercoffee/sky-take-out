@@ -123,6 +123,12 @@
                 <version>0.4.8</version>
             </dependency>
 
+            <!-- Spring Boot AOP -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+            </dependency>
+
 
         </dependencies>
     </dependencyManagement>
