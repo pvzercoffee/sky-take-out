@@ -5,6 +5,9 @@ import com.sky.entity.Category;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+
+import java.util.List;
 
 @Mapper
 public interface CategoryMapper {
@@ -24,6 +27,14 @@ public interface CategoryMapper {
      * @return
      */
     Page<Category> pageQuery(String name, Integer type);
+
+    /**
+     * 根据类型查询分页
+     * @param type
+     * @return
+     */
+    @Select("select * from category where type = #{type}")
+    List<Category> queryByType(Integer type);
 
     /**
      * 修改分类
