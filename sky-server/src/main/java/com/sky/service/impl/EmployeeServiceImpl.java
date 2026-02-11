@@ -96,6 +96,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
     /**
      * 员工分页查询
+     *
      * @param employeePageQueryDTO
      */
     @Override
@@ -106,7 +107,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Page<Employee> records = employeeMapper.pageQuery(employeePageQueryDTO);
 
-        return new PageResult(records.getTotal(),records);
+        return new PageResult(records.getTotal(),records.getResult());
     }
 
     /**
@@ -137,6 +138,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employee;
     }
 
+    /**
+     * 根据id修改员工信息
+     * @param employeeDTO 包含修改信息的DTO对象
+     */
     @Override
     public void editById(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
