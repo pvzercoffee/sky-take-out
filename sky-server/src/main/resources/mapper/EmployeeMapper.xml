@@ -14,6 +14,7 @@
         order by create_time desc
     </select>
 
+    <!-- 更新员工数据 -->
     <update id="update" parameterType="Employee">
         update employee
         <set>

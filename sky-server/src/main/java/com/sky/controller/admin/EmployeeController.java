@@ -29,6 +29,7 @@ import java.util.Map;
 @Slf4j
 public class EmployeeController {
 
+    // 没有写@Service注解为什么能注入成功？因为在ServiceImpl类上有@Service注解，Spring会扫描到这个类并将其注册为一个Bean，所以可以通过@Autowired注解将其注入到Controller中使用。
     @Autowired
     private EmployeeService employeeService;
     @Autowired
@@ -76,6 +77,11 @@ public class EmployeeController {
         return Result.success();
     }
 
+    /**
+     *  添加员工
+     * @param employeeDTO
+     * @return
+     */
     @PostMapping
     @ApiOperation("添加员工")
     public Result<String> save(@RequestBody EmployeeDTO employeeDTO){
