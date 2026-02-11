@@ -76,19 +76,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         BeanUtils.copyProperties(employeeLoginDTO, employee);
 
-        //设置当前记录的修改时间和创建时间
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-
         //设置当前状态，0禁用1启用
         employee.setStatus(StatusConstant.ENABLE);
 
         //设置默认密码
         employee.setPassword(securityConfig.passwordEncoder().encode(PasswordConstant.DEFAULT_PASSWORD));
 
-        //TODO 设置当前记录人和修改人ID
-        employee.setCreateUser(BaseContext.getCurrentId());
-        employee.setUpdateUser(BaseContext.getCurrentId() );
 
         employeeMapper.insert(employee);
 
@@ -147,9 +140,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee employee = new Employee();
 
         BeanUtils.copyProperties(employeeDTO,employee);
-
-        employee.setUpdateUser(BaseContext.getCurrentId());
-        employee.setUpdateTime(LocalDateTime.now());
 
         employeeMapper.update(employee);
     }
