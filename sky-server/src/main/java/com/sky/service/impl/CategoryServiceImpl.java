@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.context.BaseContext;
 import com.sky.dto.CategoryDTO;
+import com.sky.dto.CategoryPageQueryDTO;
 import com.sky.entity.Category;
 import com.sky.mapper.CategoryMapper;
 import com.sky.result.PageResult;
@@ -40,18 +41,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     /**
      * 分类分页查询
-     *
-     * @param name
-     * @param page
-     * @param pageSize
-     * @param type
+     * @param queryDTO
      * @return
      */
     @Override
-    public PageResult page(String name, Integer page, Integer pageSize, Integer type) {
-        PageHelper.startPage(page,pageSize);
+    public PageResult page(CategoryPageQueryDTO queryDTO) {
+        PageHelper.startPage(queryDTO.getPage(),queryDTO.getPageSize());
 
-        Page<Category> records = categoryMapper.pageQuery(name,type);
+        Page<Category> records = categoryMapper.pageQuery(queryDTO.getName(),queryDTO.getType());
+
 
         return new PageResult(records.getTotal(),records.getResult());
     }
