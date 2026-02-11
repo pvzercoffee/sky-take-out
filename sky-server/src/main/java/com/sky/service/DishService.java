@@ -7,5 +7,5 @@ public interface DishService {
      * 添加菜品
      * @param dishDTO
      */
-    void save(DishDTO dishDTO);
+    void saveWidthFlavor(DishDTO dishDTO);
 }

@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 菜品管理
+ */
 @Api(tags = "菜品相关接口")
 @RestController
 @Slf4j
@@ -29,7 +32,8 @@ public class DishController {
     @PostMapping
     @ApiOperation("添加菜品")
     public Result save(@RequestBody DishDTO dishDTO){
-        dishService.save(dishDTO);
+        log.info("新增菜品:{}",dishDTO);
+        dishService.saveWidthFlavor(dishDTO);
         return Result.success();
     }
 
