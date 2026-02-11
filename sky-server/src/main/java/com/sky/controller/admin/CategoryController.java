@@ -46,4 +46,16 @@ public class CategoryController {
         PageResult result = categoryService.page(pageQueryDTO);
         return Result.success(result);
     }
+
+    /**
+     * 修改分类
+     * @param categoryDTO
+     * @return
+     */
+    @ApiOperation("修改分类")
+    @PutMapping
+    public Result modifyById(@RequestBody CategoryDTO categoryDTO){
+        categoryService.modifyById(categoryDTO);
+        return Result.success();
+    }
 }

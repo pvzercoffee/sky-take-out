@@ -27,4 +27,10 @@ public interface CategoryMapper {
      * @return
      */
     Page<Category> pageQuery(String name, Integer type);
+
+    /**
+     * 修改分类
+     * @param category
+     */
+    void update(Category category);
 }

@@ -18,4 +18,9 @@ public interface CategoryService {
      */
     PageResult page(CategoryPageQueryDTO pageQueryDTO);
 
+    /**
+     * 修改分类
+     * @param categoryDTO
+     */
+    void modifyById(CategoryDTO categoryDTO);
 }
