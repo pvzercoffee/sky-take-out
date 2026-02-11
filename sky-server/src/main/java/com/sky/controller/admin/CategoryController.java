@@ -58,4 +58,18 @@ public class CategoryController {
         categoryService.modifyById(categoryDTO);
         return Result.success();
     }
+
+    /**
+     * 启用、禁用分类
+     * @param status
+     * @param id
+     * @return
+     */
+    @ApiOperation("启用、禁用分类")
+    @PostMapping("/status/{status}")
+    public Result startOrStop(@PathVariable Integer status,Long id){
+        categoryService.startOrStop(status,id);
+        return Result.success();
+    }
+
 }
