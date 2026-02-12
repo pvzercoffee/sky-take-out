@@ -1,5 +1,6 @@
 package com.sky.mapper;
 
+import com.github.pagehelper.Page;
 import com.sky.annotation.AutoFill;
 import com.sky.entity.Dish;
 import com.sky.enumeration.OperationType;
@@ -26,4 +27,13 @@ public interface DishMapper {
      */
     @AutoFill(OperationType.INSERT)
     void save(Dish dish);
+
+
+    /**
+     * 分页分类查询
+     * @param name 菜品名称
+     * @param categoryId 菜品分类
+     * @param status 售卖状态
+     */
+    Page<Dish> page(String name, Integer categoryId, Integer status);
 }
