@@ -3,7 +3,6 @@ package com.sky.service;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
 import com.sky.result.PageResult;
-import com.sky.result.Result;
 import com.sky.vo.DishVO;
 
 import java.util.List;
@@ -34,4 +33,10 @@ public interface DishService {
      * @return
      */
     DishVO queryByIdWidthFlavor(Long id);
+
+    /**
+     * 修改菜品及对应口味
+     * @param dishDTO 菜品信息
+     */
+    void modifyWidthFlavor(DishDTO dishDTO);
 }
