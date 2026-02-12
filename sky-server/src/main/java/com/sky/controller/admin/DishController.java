@@ -77,4 +77,17 @@ public class DishController {
         DishVO dishVO = dishService.queryByIdWidthFlavor(id);
         return Result.success(dishVO);
     }
+
+    /**
+     * 修改菜品
+     * @param dishDTO 菜品信息
+     * @return
+     */
+    @PutMapping
+    @ApiOperation("修改菜品")
+    public Result modify(@RequestBody  DishDTO dishDTO){
+        log.info("修改菜品:{}",dishDTO);
+        dishService.modifyWidthFlavor(dishDTO);
+        return Result.success();
+    }
 }

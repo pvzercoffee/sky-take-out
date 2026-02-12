@@ -10,7 +10,6 @@
         values (#{name}, #{categoryId}, #{price}, #{image}, #{description}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})
     </insert>
 
-
     <!-- 菜品分页查询-->
     <select id="page" resultType="com.sky.vo.DishVO">
         select d.*,c.name as categoryName
@@ -29,10 +28,27 @@
         order by d.create_time desc
     </select>
 
+    <!-- 根据id批量查询菜品 -->
     <delete id="deleteByIds">
         delete from dish where id in
             <foreach collection="ids" separator="," item="id" open="(" close=")">
                 #{id}
             </foreach>
     </delete>
+
+    <!-- 修改菜品 -->
+    <update id="update">
+        update dish
+        <set>
+            <if test="name != null">name = #{name},</if>
+            <if test="categoryId != null">category_id = #{categoryId},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="image != null">image = #{image},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateUser != null">update_user = #{updateUser},</if>
+        </set>
+        where id = #{id}
+    </update>
 </mapper>

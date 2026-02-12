@@ -49,7 +49,7 @@ public class DishServiceImpl implements DishService {
 
 
         List<DishFlavor> flavor = dishDTO.getFlavors();
-        if(flavor != null && !flavor.isEmpty()){
+        if(!flavor.isEmpty()){
             flavor.forEach(dishFlavor -> dishFlavor.setDishId(dish.getId()));
             //向口味表添加n条数据
             flavorMapper.insertBatch(flavor);
@@ -101,6 +101,11 @@ public class DishServiceImpl implements DishService {
         flavorMapper.deleteByDishIds(ids);
     }
 
+    /**
+     * 根据id查询菜品及口味
+     * @param id
+     * @return
+     */
     @Override
     public DishVO queryByIdWidthFlavor(Long id) {
 
@@ -117,5 +122,27 @@ public class DishServiceImpl implements DishService {
         dishVO.setFlavors(flavorList);
 
         return dishVO;
+    }
+
+    /**
+     * 修改菜品及对应口味
+     * @param dishDTO 菜品信息
+     */
+    @Transactional
+    @Override
+    public void modifyWidthFlavor(DishDTO dishDTO) {
+        Dish dish = new Dish();
+        BeanUtils.copyProperties(dishDTO,dish);
+
+        flavorMapper.deleteByDishId(dishDTO.getId());
+
+        List<DishFlavor> flavor = dishDTO.getFlavors();
+        if(!flavor.isEmpty()){
+            flavor.forEach(dishFlavor -> dishFlavor.setDishId(dish.getId()));
+            //向口味表添加n条数据
+            flavorMapper.insertBatch(flavor);
+        }
+
+        dishMapper.update(dish);
     }
 }
