@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class DishServiceImpl implements DishService {
@@ -144,5 +145,15 @@ public class DishServiceImpl implements DishService {
         }
 
         dishMapper.update(dish);
+    }
+
+    /**
+     * 菜品起售、停售
+     * @param id 主键
+     * @param status 启停售状态
+     */
+    @Override
+    public void startOrStop(Long id,Integer status) {
+        dishMapper.startOrStop(id,status);
     }
 }
