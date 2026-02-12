@@ -90,4 +90,11 @@ public class DishController {
         dishService.modifyWidthFlavor(dishDTO);
         return Result.success();
     }
+
+    @PostMapping("/status/{status}")
+    @ApiOperation("菜品起售、停售")
+    public Result startOrStop(@RequestParam Long id,@PathVariable Integer status){
+        dishService.startOrStop(id,status);
+        return Result.success();
+    }
 }
