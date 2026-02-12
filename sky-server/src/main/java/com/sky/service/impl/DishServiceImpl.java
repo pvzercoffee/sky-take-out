@@ -1,10 +1,14 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.dto.DishDTO;
+import com.sky.dto.DishPageQueryDTO;
 import com.sky.entity.Dish;
 import com.sky.entity.DishFlavor;
 import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
+import com.sky.result.PageResult;
 import com.sky.service.DishService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +46,17 @@ public class DishServiceImpl implements DishService {
             //向口味表添加n条数据
             flavorMapper.insertBatch(flavor);
         }
+
+    }
+
+    @Override
+    public PageResult page(DishPageQueryDTO pageQueryDTO) {
+
+        PageHelper.startPage(pageQueryDTO.getPage(),pageQueryDTO.getPageSize());
+
+        Page<Dish> records =  dishMapper.page(pageQueryDTO.getName(),pageQueryDTO.getCategoryId(),pageQueryDTO.getStatus());
+
+        return new PageResult(records.getTotal(),records.getResult());
 
     }
 }
