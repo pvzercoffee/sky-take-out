@@ -13,6 +13,7 @@ import com.sky.mapper.DishFlavorMapper;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.result.PageResult;
+import com.sky.result.Result;
 import com.sky.service.DishService;
 import com.sky.vo.DishVO;
 import org.springframework.beans.BeanUtils;
@@ -98,6 +99,23 @@ public class DishServiceImpl implements DishService {
 
         //删除关联口味数据
         flavorMapper.deleteByDishIds(ids);
+    }
 
+    @Override
+    public DishVO queryByIdWidthFlavor(Long id) {
+
+        //根据id查询菜品数据
+        Dish dish = dishMapper.queryById(id);
+
+        //根据菜品id查询口味数据
+        List<DishFlavor> flavorList = flavorMapper.queryByDishId(id);
+
+        //将查询到的口味数据封装到VO
+        DishVO dishVO = new DishVO();
+        BeanUtils.copyProperties(dish,dishVO);
+
+        dishVO.setFlavors(flavorList);
+
+        return dishVO;
     }
 }
