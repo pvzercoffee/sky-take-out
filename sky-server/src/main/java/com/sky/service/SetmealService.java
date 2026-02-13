@@ -36,4 +36,11 @@ public interface SetmealService {
      * @return
      */
     SetmealVO queryById(Long id);
+
+    /**
+     * 修改套餐
+     * @param setmealDTO 修改内容
+     * @return
+     */
+    void modify(SetmealDTO setmealDTO);
 }
