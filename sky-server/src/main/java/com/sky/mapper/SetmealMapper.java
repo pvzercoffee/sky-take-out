@@ -2,6 +2,7 @@ package com.sky.mapper;
 
 import com.github.pagehelper.Page;
 import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.entity.Setmeal;
 import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -25,5 +26,9 @@ public interface SetmealMapper {
      */
     Page<SetmealVO> page(String name, Integer categoryId, Integer status);
 
-
+    /**
+     * 新增套餐
+     * @param setmeal 套餐信息
+     */
+    void insert(Setmeal setmeal);
 }

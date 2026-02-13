@@ -3,6 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.mapper.SetmealDishMapper">
 
+    <!-- 根据套餐id获取菜品id -->
     <select id="getSetmealIdByDishId" resultType="java.lang.Long">
         select setmeal_id from setmeal_dish where dish_id in
             <foreach collection="dishIds" item="dishId" separator="," open="(" close=")">
@@ -10,4 +11,12 @@
             </foreach>
 
     </select>
+
+    <!-- 新增套餐关联菜品 -->
+    <insert id="insertBatch">
+        insert into setmeal_dish(setmeal_id, dish_id, name, price, copies) values
+            <foreach collection="setmealDishes" separator="," item="dish">
+                (#{dish.setmealId},#{dish.dishId},#{dish.name},#{dish.price},#{dish.copies})
+            </foreach>
+    </insert>
 </mapper>
