@@ -53,4 +53,6 @@ public interface SetmealMapper {
      */
     @Select("select * from setmeal where id = #{id}")
     Setmeal queryById(Long id);
+
+    void update(Setmeal setmeal);
 }
