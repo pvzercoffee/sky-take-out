@@ -20,4 +20,12 @@ public interface SetmealService {
      * @param setmealDTO 套餐信息
      */
     void save(SetmealDTO setmealDTO);
+
+    /**
+     * 套餐起售、停售
+     * @param id 目标id
+     * @param status 要修改的状态
+     * @return
+     */
+    void startOrStop(Long id, Integer status);
 }

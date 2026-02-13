@@ -68,4 +68,14 @@ public class SetmealServiceImpl implements SetmealService {
 
         return pageResult;
     }
+
+    /**
+     * 套餐起售、停售
+     * @param id 目标id
+     * @param status 要修改的状态
+     */
+    @Override
+    public void startOrStop(Long id, Integer status) {
+        setmealMapper.startOrStop(id,status);
+    }
 }

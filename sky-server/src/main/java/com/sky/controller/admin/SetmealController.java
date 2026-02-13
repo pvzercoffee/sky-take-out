@@ -49,4 +49,19 @@ public class SetmealController {
         log.info("套餐分页查询：{}",queryDTO);
         return Result.success(setmealService.page(queryDTO));
     }
+
+    /**
+     * 套餐起售、停售
+     * @param id 目标id
+     * @param status 要修改的状态
+     * @return
+     */
+    @PostMapping("/status/{status}")
+    @ApiOperation("套餐起售、停售")
+    public Result startOtStop(@RequestParam Long id, @PathVariable  Integer status){
+
+        log.info("套餐起售、停售:{}",id);
+        setmealService.startOrStop(id,status);
+        return Result.success();
+    }
 }
