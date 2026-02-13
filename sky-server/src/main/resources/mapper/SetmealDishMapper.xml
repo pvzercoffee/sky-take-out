@@ -19,4 +19,11 @@
                 (#{dish.setmealId},#{dish.dishId},#{dish.name},#{dish.price},#{dish.copies})
             </foreach>
     </insert>
+
+    <!-- 根据套餐id查询套餐与菜品关系 -->
+    <select id="getLinkOfSetmeal" resultType="com.sky.entity.SetmealDish">
+        select sd.id,sd.setmeal_id,sd.dish_id,d.name,d.price,sd.copies from setmeal_dish sd
+            left join dish d on sd.dish_id = d.id
+                 where setmeal_id = #{setmealId}
+    </select>
 </mapper>

@@ -21,4 +21,11 @@ public interface SetmealDishMapper {
      * @param setmealDishes 关联菜品列表
      */
     void insertBatch(List<SetmealDish> setmealDishes);
+
+    /**
+     * 根据套餐id查询套餐与菜品关系
+     * @param setmealId
+     * @return
+     */
+    List<SetmealDish> getLinkOfSetmeal(Long setmealId);
 }

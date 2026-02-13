@@ -72,6 +72,7 @@ public interface DishMapper {
      * @param id 主键
      * @param status 启停售状态
      */
+    @AutoFill(OperationType.UPDATE)
     @Update("update dish set status = #{status} where id = #{id}")
     void startOrStop(Long id, Integer status);
 

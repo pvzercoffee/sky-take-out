@@ -45,4 +45,12 @@ public interface SetmealMapper {
     @Update("update setmeal set status = #{status} where id = #{id}")
     @AutoFill(OperationType.UPDATE)
     void startOrStop(Long id, Integer status);
+
+    /**
+     * 根据id查询套餐
+     * @param id
+     * @return
+     */
+    @Select("select * from setmeal where id = #{id}")
+    Setmeal queryById(Long id);
 }
