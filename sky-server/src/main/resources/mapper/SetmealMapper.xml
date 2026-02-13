@@ -58,4 +58,12 @@
         </set>
         where id = #{id}
     </update>
+
+    <!-- 批量根据id查询套餐 -->
+    <select id="queryByIds" resultType="com.sky.entity.Setmeal">
+        select * from setmeal where id in
+            <foreach collection="ids" item="id" separator="," open="(" close=")">
+                #{id}
+            </foreach>
+    </select>
 </mapper>
