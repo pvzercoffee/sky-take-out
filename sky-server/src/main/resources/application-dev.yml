@@ -6,8 +6,14 @@ sky:
     database: sky_take_out
     username: root
     password: 3674227ABC
+
   alioss:
     endpoint: oss-cn-beijing.aliyuncs.com
     bucketName: pvzer
     access-key-secret:
     access-key-id:
+
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
