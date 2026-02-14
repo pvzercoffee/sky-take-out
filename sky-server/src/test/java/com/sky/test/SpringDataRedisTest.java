@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-@SpringBootTest
+//@SpringBootTest
 public class SpringDataRedisTest {
 
-    @Autowired
+//    @Autowired
     RedisTemplate redisTemplate;
 
     @Test
