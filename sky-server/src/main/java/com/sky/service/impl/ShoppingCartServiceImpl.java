@@ -94,6 +94,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     }
 
+    /**
+     * 动态查询购物车
+     * @return
+     */
     @Override
     public List<ShoppingCart> query() {
         ShoppingCart shoppingCart = ShoppingCart.builder()
@@ -102,8 +106,12 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         return shoppingCartMapper.query(shoppingCart);
     }
 
+    /**
+     * 清空购物车
+     */
     @Override
     public void clear() {
-
+        Long id = BaseContext.getCurrentId();
+        shoppingCartMapper.clear(id);
     }
 }
