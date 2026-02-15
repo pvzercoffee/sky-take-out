@@ -77,7 +77,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     @Override
     public List<ShoppingCart> query() {
-        return null;
+        ShoppingCart shoppingCart = ShoppingCart.builder()
+                .userId(BaseContext.getCurrentId())
+                .build();
+        return shoppingCartMapper.query(shoppingCart);
     }
 
     @Override
