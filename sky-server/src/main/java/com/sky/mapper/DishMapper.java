@@ -81,5 +81,5 @@ public interface DishMapper {
      * @param categoryId 分类主键
      * @return
      */
-    List<Dish> queryByCategoryId(Integer categoryId);
+    List<DishVO> queryByCategoryId(Integer categoryId);
 }

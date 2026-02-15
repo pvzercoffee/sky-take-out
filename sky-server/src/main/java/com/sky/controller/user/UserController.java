@@ -23,7 +23,7 @@ import java.util.Map;
 /**
  * 用户端用户管理
  */
-@Api(tags = "用户相关接口")
+@Api(tags = "C端-用户相关接口")
 @RestController
 @RequestMapping("/user/user")
 @Slf4j
