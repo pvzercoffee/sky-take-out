@@ -35,7 +35,7 @@ public class SetmealController {
      * @param categoryId 分类id
      * @return
      */
-    @GetMapping
+    @GetMapping("/list")
     @ApiOperation("根据分类id查询套餐")
     public Result<List<Setmeal>> list(Long categoryId){
         log.info("根据分类id查询套餐:{}",categoryId);
