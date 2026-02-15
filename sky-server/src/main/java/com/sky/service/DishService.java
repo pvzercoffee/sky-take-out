@@ -53,5 +53,5 @@ public interface DishService {
      * @param categoryId 分类主键
      * @return
      */
-    List<Dish> list(Integer categoryId);
+    List<DishVO> list(Integer categoryId);
 }

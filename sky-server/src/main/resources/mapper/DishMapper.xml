@@ -53,7 +53,8 @@
     </update>
 
     <!-- 根据分类id查询菜品 -->
-    <select id="queryByCategoryId" resultType="com.sky.entity.Dish">
-        select * from dish where category_id = #{categoryId} and status = 1
+    <select id="queryByCategoryId" resultType="com.sky.vo.DishVO">
+        select d.*,c.name categoryName from dish d left join category c on d.category_id = c.id
+                 where d.category_id = #{categoryId} and d.status = 1
     </select>
 </mapper>
