@@ -55,7 +55,16 @@ public class ShoppingCartController {
     @ApiOperation("删除购物车中的一个商品")
     public Result sub(@RequestBody  ShoppingCartDTO cartDTO){
 
+        log.info("删除购物车中的一个商品:{}"+cartDTO);
         shoppingCartService.delete(cartDTO);
+        return Result.success();
+    }
+
+    @DeleteMapping("/clean")
+    @ApiOperation("清空购物车")
+    public Result clear(){
+        log.info("清空购物车...");
+        shoppingCartService.clear();
         return Result.success();
     }
 }
