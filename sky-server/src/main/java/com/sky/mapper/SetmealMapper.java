@@ -77,4 +77,12 @@ public interface SetmealMapper {
      */
     @Delete("delete from setmeal where id = #{id}")
     void delete(Long id);
+
+
+    /**
+     * 自由查询套餐
+     * @param setmeal 查询信息
+     * @return
+     */
+    List<Setmeal> queryByCategoryId(Setmeal setmeal);
 }

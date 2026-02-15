@@ -23,7 +23,7 @@ import java.util.List;
 public class DishController {
 
     @Autowired
-    DishService dishService;
+    private DishService dishService;
 
     /**
      *
@@ -32,6 +32,7 @@ public class DishController {
     @GetMapping
     @ApiOperation("根据分类id查询菜品")
     public Result<List<DishVO>> list(Integer categoryId){
+        log.info("用户端根据分类id查询菜品:{}",categoryId);
         List<DishVO> dishVOList = dishService.list(categoryId);
         return Result.success(dishVOList);
     }
