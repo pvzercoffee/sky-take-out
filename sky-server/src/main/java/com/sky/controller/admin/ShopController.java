@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 店铺管理
  */
-@Api(tags = "店铺相关接口")
+@Api(tags = "C端-店铺相关接口")
 @RestController("adminShopController")  //防止Bean名称冲突
 @RequestMapping("/admin/shop")
 @Slf4j

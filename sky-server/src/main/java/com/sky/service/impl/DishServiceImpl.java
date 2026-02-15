@@ -158,13 +158,13 @@ public class DishServiceImpl implements DishService {
     }
 
     /**
-     * 根据分类id查询菜品
-     * @param categoryId 分类主键
+     * 动态查询菜品
+     * @param dish
      * @return
      */
     @Override
-    public List<DishVO> list(Integer categoryId) {
-        List<DishVO> records =  dishMapper.queryByCategoryId(categoryId);
+    public List<DishVO> list(Dish dish) {
+        List<DishVO> records =  dishMapper.query(dish);
 
         for(DishVO dishVO : records){
             List<DishFlavor> flavorList = flavorMapper.queryByDishId(dishVO.getId());
