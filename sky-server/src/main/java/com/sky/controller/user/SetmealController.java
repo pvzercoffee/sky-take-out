@@ -38,7 +38,7 @@ public class SetmealController {
     @GetMapping
     @ApiOperation("根据分类id查询套餐")
     public Result<List<Setmeal>> list(Long categoryId){
-
+        log.info("根据分类id查询套餐:{}",categoryId);
         Setmeal setmeal = new Setmeal().builder()
                 .categoryId(categoryId)
                 .status(StatusConstant.ENABLE)
@@ -56,6 +56,7 @@ public class SetmealController {
     @GetMapping("/dish/{id}")
     @ApiOperation("根据套餐id查询包含的菜品")
     public Result dishList(@PathVariable  Long id){
+         log.info("根据套餐id查询包含的菜品:{}",id);
          List<DishItemVO> items= setmealService.getDishItemById(id);
          return Result.success(items);
     }
