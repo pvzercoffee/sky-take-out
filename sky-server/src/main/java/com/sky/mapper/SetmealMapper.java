@@ -5,6 +5,7 @@ import com.sky.annotation.AutoFill;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.enumeration.OperationType;
+import com.sky.vo.DishItemVO;
 import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
@@ -85,4 +86,14 @@ public interface SetmealMapper {
      * @return
      */
     List<Setmeal> queryByCategoryId(Setmeal setmeal);
+
+    /**
+     * 根据套餐id查询包含的菜品
+     * @param setmealId 套餐id
+     * @return
+     */
+    @Select("select d.name,sd.copies,d.image,d.description" +
+            " from setmeal_dish sd  " +
+            "left join dish d on d.id = sd.dish_id where sd.setmeal_id = #{setmealId}")
+    List<DishItemVO> getDishItemBySetmealId(Long setmealId);
 }
