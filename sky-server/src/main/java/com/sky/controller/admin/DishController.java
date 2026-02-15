@@ -15,6 +15,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 菜品管理
@@ -28,6 +29,9 @@ public class DishController {
     @Autowired
     private DishService dishService;
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     /**
      * 添加菜品
      * @param dishDTO
@@ -38,6 +42,11 @@ public class DishController {
     public Result save(@RequestBody DishDTO dishDTO){
         log.info("新增菜品:{}",dishDTO);
         dishService.saveWidthFlavor(dishDTO);
+
+        //清理缓存数据
+        String key = "dish_" + dishDTO.getCategoryId();
+        cleanCache(key);
+
         return Result.success();
     }
 
@@ -64,6 +73,10 @@ public class DishController {
     public Result remove(@RequestParam List<Long> ids){ //必须要加@RequestParam
         log.info("菜品批量删除:{}",ids);
         dishService.removeBatch(ids);
+
+        //清理所有菜品缓存
+        cleanCache("dish_*");
+
         return Result.success();
     }
 
@@ -90,6 +103,10 @@ public class DishController {
     public Result modify(@RequestBody  DishDTO dishDTO){
         log.info("修改菜品:{}",dishDTO);
         dishService.modifyWidthFlavor(dishDTO);
+
+        //清理所有菜品缓存
+        cleanCache("dish_*");
+
         return Result.success();
     }
 
@@ -103,6 +120,10 @@ public class DishController {
     @ApiOperation("菜品起售、停售")
     public Result startOrStop(@RequestParam Long id,@PathVariable Integer status){
         dishService.startOrStop(id,status);
+
+        //清理所有菜品缓存
+        cleanCache("dish_*");
+
         return Result.success();
     }
 
@@ -118,5 +139,15 @@ public class DishController {
         dish.setCategoryId(categoryId);
         List<DishVO> records = dishService.list(dish);
         return Result.success(records);
+    }
+
+    /**
+     * 清理缓存数据
+     * @param pattern key模式
+     */
+    private void cleanCache(String pattern){
+        //将所有的菜品缓存数据清除
+        Set keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
     }
 }
