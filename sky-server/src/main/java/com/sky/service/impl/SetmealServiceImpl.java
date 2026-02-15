@@ -160,4 +160,15 @@ public class SetmealServiceImpl implements SetmealService {
 
         });
     }
+
+    /**
+     * 根据信息查询套餐
+     * @param setmeal 信息
+     * @return
+     */
+    @Override
+    public List<Setmeal> list(Setmeal setmeal) {
+        List<Setmeal> records = setmealMapper.queryByCategoryId(setmeal);
+        return records;
+    }
 }
