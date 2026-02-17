@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  sky-server:
+    # 1. 自动构建：这里告诉它去读取当前目录(.)的 Dockerfile
+    build: .
+    # 或者如果你已经build好了镜像，也可以写 image: sky-server:v1.0
+    
+    # 2. 容器名称 (--name)
+    container_name: sky-server
+    
+    # 3. 解决网络问题：直接使用宿主机网络 (--network host)
+    # 这样你的 Java 代码连 localhost:3306 就是连宿主机的 MySQL，无需配置 IP
+    network_mode: "host"
+    
+    # 4. 重启策略 (--restart always)
+    restart: always
+    
+    # 5. 挂载日志（可选，强烈建议）：把容器里的日志映射出来，方便排错
+    volumes:
+      - ./logs:/app/logs
