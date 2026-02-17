@@ -41,7 +41,7 @@
     </update>
 
     <!-- 历史订单查询 -->
-    <select id="query" resultType="com.sky.vo.OrdersVO">
+    <select id="page" resultType="com.sky.vo.OrderVO">
         select * from orders
         <where>
             <if test="id != null">and id = #{id}</if>
@@ -49,4 +49,14 @@
             <if test="status != null">and status = #{status}</if>
         </where>
     </select>
+
+    <select id="query" resultType="com.sky.vo.OrderVO">
+        select * from orders
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="status != null">and status = #{status}</if>
+        </where>
+    </select>
+
 </mapper>

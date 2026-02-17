@@ -9,12 +9,15 @@ import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
+import com.sky.vo.OrderVO;
 import com.sky.vo.OrdersVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 店铺管理
@@ -76,6 +79,13 @@ public class OrderController {
         PageResult pageResult = orderService.history(page,pageSize,status);
 
         return Result.success(pageResult);
+    }
 
+    @GetMapping("/orderDetail/{id}")
+    @ApiOperation("查询订单详情")
+    public Result<OrderVO> queryDetail(@PathVariable Long id){
+        log.info("查询订单详情:{}",id);
+        OrderVO orderList = orderService.queryDetail(id);
+        return  Result.success(orderList);
     }
 }

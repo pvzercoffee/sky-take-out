@@ -83,6 +83,7 @@ public class OrderServiceImpl implements OrderService {
         orders.setNumber(String.valueOf(System.currentTimeMillis()));
         orders.setPhone(addressBook.getPhone());
         orders.setConsignee(addressBook.getConsignee());
+        orders.setAddress(addressBook.getDetail());
         orders.setUserId(userId);
 
         orderMapper.insert(orders);
@@ -182,14 +183,32 @@ public class OrderServiceImpl implements OrderService {
                 .userId(userId)
                 .status(status)
                 .build();
-        Page<OrdersVO> records =  orderMapper.query(orders);
+        Page<OrderVO> records =  orderMapper.page(orders);
 
         //TODO:解决n+1问题
-        for(OrdersVO item : records){
+        for(OrderVO item : records){
             List<OrderDetail> orderDetailList = detailMapper.queryByOrdersId(item.getId());
             item.setOrderDetailList(orderDetailList);
         }
 
         return new PageResult(records.getTotal(), records.getResult());
+    }
+
+    /**
+     * 查询订单详情
+     * @param id
+     * @return
+     */
+    @Override
+    public OrderVO queryDetail(Long id) {
+        Orders orders = Orders.builder()
+                .id(id)
+                .userId(BaseContext.getCurrentId())
+                .build();
+
+        OrderVO detail = orderMapper.query(orders);
+        detail.setOrderDetailList(detailMapper.queryByOrdersId(id));
+
+        return detail;
     }
 }

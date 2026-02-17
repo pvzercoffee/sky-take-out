@@ -2,8 +2,7 @@ package com.sky.mapper;
 
 import com.github.pagehelper.Page;
 import com.sky.entity.Orders;
-import com.sky.vo.OrdersVO;
-import org.apache.ibatis.annotations.Insert;
+import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -31,8 +30,15 @@ public interface OrderMapper {
 
     /**
      * 历史订单查询
-     * @param orders
+     * @param order
      * @return
      */
-    Page<OrdersVO> query(Orders orders);
+    Page<OrderVO> page(Orders order);
+
+    /**
+     * 根据id查询订单
+     * @param id
+     * @return
+     */
+    OrderVO query(Orders orders);
 }
