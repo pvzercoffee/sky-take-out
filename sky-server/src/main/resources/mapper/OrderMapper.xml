@@ -39,4 +39,14 @@
         </set>
         where id = #{id}
     </update>
+
+    <!-- 历史订单查询 -->
+    <select id="query" resultType="com.sky.vo.OrdersVO">
+        select * from orders
+        <where>
+            <if test="id != null">and id = #{id}</if>
+            <if test="userId != null">and user_id = #{userId}</if>
+            <if test="status != null">and status = #{status}</if>
+        </where>
+    </select>
 </mapper>

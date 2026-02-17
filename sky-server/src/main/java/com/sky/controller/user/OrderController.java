@@ -3,11 +3,13 @@ package com.sky.controller.user;
 
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
+import com.sky.entity.Orders;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
-import com.sky.vo.OrderVO;
+import com.sky.vo.OrdersVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -57,5 +59,23 @@ public class OrderController {
         orderService.paySuccess(paymentDTO.getOrderNumber());
 
         return Result.success(orderPaymentVO);
+    }
+
+    /**
+     * 历史订单查询
+     * @param page
+     * @param pageSize
+     * @param status
+     * @return
+     */
+    @GetMapping("historyOrders")
+    @ApiOperation("历史订单查询")
+    public Result<PageResult> history(Integer page, Integer pageSize, Integer status){
+        log.info("历史订单查询:第{}页,每页{}条,状态:{}",page,pageSize,status);
+
+        PageResult pageResult = orderService.history(page,pageSize,status);
+
+        return Result.success(pageResult);
+
     }
 }
