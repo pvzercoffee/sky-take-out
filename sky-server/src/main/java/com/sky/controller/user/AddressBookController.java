@@ -1,6 +1,7 @@
 package com.sky.controller.user;
 
 import com.sky.entity.AddressBook;
+import com.sky.mapper.AddressBookMapper;
 import com.sky.result.Result;
 import com.sky.service.AddressBookService;
 import io.swagger.annotations.Api;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "C端-地址簿相关接口")
 @RestController
@@ -33,7 +35,6 @@ public class AddressBookController {
         return Result.success();
     }
 
-
     /**
      * 查询当前用户所有地址
      * @return
@@ -44,7 +45,23 @@ public class AddressBookController {
         log.info("查询当前用户所有地址");
         List<AddressBook> records = addressBookService.list();
         return Result.success(records);
+    }
 
+    @PutMapping("/default")
+    @ApiOperation("设置默认地址")
+    //TODO:封装成DTO
+    public Result setDefault(@RequestBody Map<String,Long> id){
+        log.info("设置默认地址:{}",id);
+        addressBookService.setDefault(id.get("id"));
+        return Result.success();
+    }
+
+    @GetMapping("/default")
+    @ApiOperation("查询默认地址")
+    public Result<AddressBook> getDefault(){
+        log.info("查询默认地址...");
+        AddressBook addressBook = addressBookService.queryDefault();
+        return Result.success(addressBook);
     }
 
 }

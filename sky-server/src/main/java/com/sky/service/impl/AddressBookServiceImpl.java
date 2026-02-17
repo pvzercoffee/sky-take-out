@@ -1,5 +1,6 @@
 package com.sky.service.impl;
 
+import com.sky.constant.StatusConstant;
 import com.sky.context.BaseContext;
 import com.sky.entity.AddressBook;
 import com.sky.exception.AddressBookBusinessException;
@@ -49,7 +50,8 @@ public class AddressBookServiceImpl implements AddressBookService {
      */
     @Override
     public AddressBook queryDefault() {
-        return null;
+        Long userId = BaseContext.getCurrentId();
+        return addressBookMapper.get(userId, StatusConstant.ENABLE);
     }
 
     /**
@@ -86,6 +88,11 @@ public class AddressBookServiceImpl implements AddressBookService {
      */
     @Override
     public void setDefault(Long id) {
+        Long userId = BaseContext.getCurrentId();
+        //清除原来的默认地址
+        addressBookMapper.clearDefault(userId);
 
+        //创建新的默认地址
+        addressBookMapper.setDefault(userId,id);
     }
 }
