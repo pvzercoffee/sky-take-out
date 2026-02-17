@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -238,6 +239,45 @@ public class OrderServiceImpl implements OrderService {
         }
 
         shoppingCartMapper.insertBatch(cartList);
+    }
+
+    /**
+     * 取消订单
+     * @param id
+     */
+    @Override
+    public void cancel(Long id) throws Exception {
+        //根据id查询订单
+        Orders param = new Orders();
+        param.setId(id);
+        Orders orders = orderMapper.query(param);
+
+        if(orders == null){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        if(orders.getStatus() > 2){
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        Orders updateParam = new Orders();
+        updateParam.setId(param.getId());
+
+        if(orders.getPayStatus().equals(Orders.TO_BE_CONFIRMED)){
+            //调用微信支付退款接口
+            weChatPayUtil.refund(
+                    orders.getNumber(), //商户订单号
+                    orders.getNumber(), //商户退款单号
+                    new BigDecimal(0.01),//退款金额，单位 元
+                    new BigDecimal(0.01));//原订单金额
+
+            updateParam.setPayStatus(Orders.REFUND);
+        }
+
+        updateParam.setStatus(Orders.CANCELLED);
+        updateParam.setCancelTime(LocalDateTime.now());
+        updateParam.setCancelReason("用户取消");
+
+        orderMapper.update(updateParam);
 
     }
 }
