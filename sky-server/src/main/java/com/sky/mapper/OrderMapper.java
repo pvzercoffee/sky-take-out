@@ -37,7 +37,7 @@ public interface OrderMapper {
 
     /**
      * 根据id查询订单
-     * @param id
+     * @param orders
      * @return
      */
     OrderVO query(Orders orders);

@@ -6,7 +6,6 @@ import com.sky.result.PageResult;
 import com.sky.vo.OrderPaymentVO;
 import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
-import com.sky.vo.OrdersVO;
 
 import java.util.List;
 
@@ -47,4 +46,10 @@ public interface OrderService {
      * @return
      */
     OrderVO queryDetail(Long id);
+
+    /**
+     * 再来一单
+     * @param orderId
+     */
+    void repetition(Long orderId);
 }

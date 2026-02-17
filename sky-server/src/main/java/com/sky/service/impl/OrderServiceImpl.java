@@ -84,6 +84,7 @@ public class OrderServiceImpl implements OrderService {
         orders.setPhone(addressBook.getPhone());
         orders.setConsignee(addressBook.getConsignee());
         orders.setAddress(addressBook.getDetail());
+        orders.setRemark(submitDTO.getRemark());
         orders.setUserId(userId);
 
         orderMapper.insert(orders);
@@ -210,5 +211,33 @@ public class OrderServiceImpl implements OrderService {
         detail.setOrderDetailList(detailMapper.queryByOrdersId(id));
 
         return detail;
+    }
+
+    /**
+     * 再来一单
+     * @param orderId
+     */
+    @Override
+    public void repetition(Long orderId) {
+        OrderVO orderVO = queryDetail(orderId);
+        List<OrderDetail> detailList = orderVO.getOrderDetailList();
+
+        Long userId = BaseContext.getCurrentId();
+
+        //先清除购物车
+        shoppingCartMapper.clear(userId);
+
+        //从订单中拼到购物车对象
+        List<ShoppingCart> cartList = new ArrayList<>();
+        for(OrderDetail item: detailList){
+            ShoppingCart shoppingCart = new ShoppingCart();
+            BeanUtils.copyProperties(item,shoppingCart);
+            shoppingCart.setCreateTime(LocalDateTime.now());
+            shoppingCart.setUserId(userId);
+            cartList.add(shoppingCart);
+        }
+
+        shoppingCartMapper.insertBatch(cartList);
+
     }
 }

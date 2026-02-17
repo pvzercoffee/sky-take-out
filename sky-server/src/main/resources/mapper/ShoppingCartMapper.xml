@@ -11,6 +11,7 @@
             (#{name}, #{image}, #{userId}, #{dishId}, #{setmealId}, #{dishFlavor}, #{number}, #{amount}, #{createTime})
     </insert>
 
+
     <!-- 动态查询购物车 -->
     <select id="query" resultType="com.sky.entity.ShoppingCart">
         select * from shopping_cart
@@ -32,5 +33,13 @@
             </if>
         </where>
     </select>
+
+    <!-- 从购物车中批量添加  -->
+    <insert id="insertBatch">
+        insert into shopping_cart(name, image, user_id, dish_id, setmeal_id, dish_flavor, number, amount, create_time) VALUES
+        <foreach collection="cartList" item="cart" separator=",">
+            (#{cart.name},#{cart.image},#{cart.userId},#{cart.dishId},#{cart.setmealId},#{cart.dishFlavor},#{cart.number},#{cart.amount},#{cart.createTime})
+        </foreach>
+    </insert>
     
 </mapper>
