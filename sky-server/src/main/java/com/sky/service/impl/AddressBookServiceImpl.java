@@ -77,7 +77,11 @@ public class AddressBookServiceImpl implements AddressBookService {
      */
     @Override
     public void deleteById(Long id) {
-
+        if(id == null){
+            throw new AddressBookBusinessException("id不能为空");
+        }
+        Long userId = BaseContext.getCurrentId();
+        addressBookMapper.deleteById(userId,id);
     }
 
     /**

@@ -2,10 +2,7 @@ package com.sky.mapper;
 
 import com.sky.entity.AddressBook;
 import io.swagger.models.auth.In;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -68,4 +65,12 @@ public interface AddressBookMapper {
      * @param addressBook
      */
     void update(AddressBook addressBook);
+
+    /**
+     * 根据id删除地址
+     * @param userId
+     * @param id
+     */
+    @Delete("delete from address_book where user_id = #{userId} and id = #{id}")
+    void deleteById(Long userId, Long id);
 }

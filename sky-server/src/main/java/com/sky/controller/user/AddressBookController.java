@@ -1,7 +1,6 @@
 package com.sky.controller.user;
 
 import com.sky.entity.AddressBook;
-import com.sky.mapper.AddressBookMapper;
 import com.sky.result.Result;
 import com.sky.service.AddressBookService;
 import io.swagger.annotations.Api;
@@ -93,6 +92,15 @@ public class AddressBookController {
         log.info("根据id修改地址信息:{}",addressBook);
 
         addressBookService.modifyById(addressBook);
+
+        return Result.success();
+    }
+
+    @DeleteMapping
+    @ApiOperation("根据id删除地址")
+    public Result deleteById(@RequestParam Long id){
+        log.info("根据id删除地址:{}",id);
+        addressBookService.deleteById(id);
 
         return Result.success();
     }
