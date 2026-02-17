@@ -7,10 +7,9 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Api(tags = "C端-地址簿相关接口")
 @RestController
@@ -33,4 +32,19 @@ public class AddressBookController {
         addressBookService.save(addressBook);
         return Result.success();
     }
+
+
+    /**
+     * 查询当前用户所有地址
+     * @return
+     */
+    @GetMapping("/list")
+    @ApiOperation("查询当前用户所有地址")
+    public Result<List<AddressBook>> list(){
+        log.info("查询当前用户所有地址");
+        List<AddressBook> records = addressBookService.list();
+        return Result.success(records);
+
+    }
+
 }

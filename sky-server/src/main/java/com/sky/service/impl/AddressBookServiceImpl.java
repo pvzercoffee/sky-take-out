@@ -36,7 +36,11 @@ public class AddressBookServiceImpl implements AddressBookService {
      */
     @Override
     public List<AddressBook> list() {
-        return null;
+
+        Long userId = BaseContext.getCurrentId();
+        List<AddressBook> addressBooks = addressBookMapper.list(userId);
+
+        return addressBooks;
     }
 
     /**
