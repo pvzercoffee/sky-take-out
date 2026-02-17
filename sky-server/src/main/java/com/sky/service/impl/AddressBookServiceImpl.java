@@ -60,7 +60,15 @@ public class AddressBookServiceImpl implements AddressBookService {
      */
     @Override
     public void modifyById(AddressBook addressBook) {
+        Long userId = BaseContext.getCurrentId();
+        addressBook.setUserId(userId);
 
+        if(addressBook.getDetail() == null || addressBook.getPhone() == null || addressBook.getSex() == null || addressBook.getId() == null)
+        {
+            throw new AddressBookBusinessException("缺少必要地址信息");
+        }
+
+        addressBookMapper.update(addressBook);
     }
 
     /**
@@ -79,7 +87,9 @@ public class AddressBookServiceImpl implements AddressBookService {
      */
     @Override
     public AddressBook queryById(Long id) {
-        return null;
+        Long userId = BaseContext.getCurrentId();
+        AddressBook addressBook = addressBookMapper.queryById(userId,id);
+        return addressBook;
     }
 
     /**

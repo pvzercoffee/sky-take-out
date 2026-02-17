@@ -47,6 +47,11 @@ public class AddressBookController {
         return Result.success(records);
     }
 
+    /**
+     * 设置默认地址
+     * @param id
+     * @return
+     */
     @PutMapping("/default")
     @ApiOperation("设置默认地址")
     //TODO:封装成DTO
@@ -56,6 +61,10 @@ public class AddressBookController {
         return Result.success();
     }
 
+    /**
+     * 查询默认地址
+     * @return
+     */
     @GetMapping("/default")
     @ApiOperation("查询默认地址")
     public Result<AddressBook> getDefault(){
@@ -64,4 +73,27 @@ public class AddressBookController {
         return Result.success(addressBook);
     }
 
+    /**
+     * 根据id查询地址信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    @ApiOperation("根据id查询地址信息")
+    public Result<AddressBook> queryById(@PathVariable Long id){
+        log.info("根据id查询地址信息:{}",id);
+
+        AddressBook addressBook = addressBookService.queryById(id);
+        return Result.success(addressBook);
+    }
+
+    @PutMapping
+    @ApiOperation("根据id修改地址信息")
+    public Result modifyById(@RequestBody AddressBook addressBook){
+        log.info("根据id修改地址信息:{}",addressBook);
+
+        addressBookService.modifyById(addressBook);
+
+        return Result.success();
+    }
 }
