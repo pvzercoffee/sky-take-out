@@ -1,8 +1,8 @@
 package com.sky.service;
 
-import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
+import com.sky.dto.OrdersRejectionDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.result.PageResult;
 import com.sky.vo.OrderPaymentVO;
@@ -66,4 +66,16 @@ public interface OrderService {
      * @return
      */
     PageResult conditionSearch(OrdersPageQueryDTO pageQueryDTO);
+
+    /**
+     * 接单
+     * @param id
+     */
+    void confirm(Long id);
+
+    /**
+     * 商家拒单
+     * @param rejectionDTO
+     */
+    void rejection(OrdersRejectionDTO rejectionDTO)  throws Exception;
 }

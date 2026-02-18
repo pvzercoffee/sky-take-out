@@ -7,6 +7,7 @@ import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
+import com.sky.dto.OrdersRejectionDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
@@ -269,15 +270,15 @@ public class OrderServiceImpl implements OrderService {
         Orders updateParam = new Orders();
         updateParam.setId(param.getId());
 
-        if(orders.getPayStatus().equals(Orders.TO_BE_CONFIRMED)){
+        if(orders.getPayStatus().equals(Orders.PAID)){
             //调用微信支付退款接口
-            weChatPayUtil.refund(
-                    orders.getNumber(), //商户订单号
-                    orders.getNumber(), //商户退款单号
-                    new BigDecimal(0.01),//退款金额，单位 元
-                    new BigDecimal(0.01));//原订单金额
-
-            updateParam.setPayStatus(Orders.REFUND);
+//            weChatPayUtil.refund(
+//                    orders.getNumber(), //商户订单号
+//                    orders.getNumber(), //商户退款单号
+//                    new BigDecimal(0.01),//退款金额，单位 元
+//                    new BigDecimal(0.01));//原订单金额
+//
+//            updateParam.setPayStatus(Orders.REFUND);
         }
 
         updateParam.setStatus(Orders.CANCELLED);
@@ -308,8 +309,6 @@ public class OrderServiceImpl implements OrderService {
         return new PageResult(records.getTotal(),records.getResult());
     }
 
-
-
     /**
      * 填充的订单的OrderDishes
      * @param records
@@ -334,6 +333,60 @@ public class OrderServiceImpl implements OrderService {
                 orderVO.setOrderDishes(dishStr);
             }
         }
+    }
 
+    /**
+     * 接单
+     * @param id
+     */
+    @Override
+    public void confirm(Long id) {
+        Orders orders = new Orders();
+        orders.setId(id);
+
+        Orders result  = orderMapper.query(orders);
+        if(result == null){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        if(result.getStatus() != Orders.TO_BE_CONFIRMED){
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        orders.setStatus(Orders.CONFIRMED);
+
+        orderMapper.update(orders);
+    }
+
+    /**
+     * 商家拒单
+     * @param rejectionDTO
+     */
+    @Override
+    public void rejection(OrdersRejectionDTO rejectionDTO) throws Exception{
+
+        Orders orders = new Orders();
+        orders.setId(rejectionDTO.getId());
+
+        Orders result  = orderMapper.query(orders);
+        if(result == null){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        if(result.getStatus() != Orders.TO_BE_CONFIRMED && result.getStatus() !=  Orders.PENDING_PAYMENT){
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        if(result.getStatus() == Orders.TO_BE_CONFIRMED){
+            //调用微信支付退款接口
+//            weChatPayUtil.refund(
+//                    result.getNumber(), //商户订单号
+//                    result.getNumber(), //商户退款单号
+//                    new BigDecimal(0.01),//退款金额，单位 元
+//                    new BigDecimal(0.01));//原订单金额
+
+            orders.setPayStatus(Orders.REFUND);
+        }
+        orders.setRejectionReason(rejectionDTO.getRejectionReason());
+        orders.setStatus(Orders.CANCELLED);
+        orders.setCancelTime(LocalDateTime.now());
+
+        orderMapper.update(orders);
     }
 }
