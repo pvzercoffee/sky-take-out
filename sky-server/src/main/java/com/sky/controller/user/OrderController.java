@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * 店铺管理
+ * 订单管理
  */
 @Api(tags = "C端-订单相关接口")
 @RestController("userOrderController")

@@ -5,6 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
+import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
 import com.sky.entity.*;
@@ -24,6 +25,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -279,5 +282,42 @@ public class OrderServiceImpl implements OrderService {
 
         orderMapper.update(updateParam);
 
+    }
+
+    /**
+     * 订单搜索
+     * @param pageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult conditionSearch(OrdersPageQueryDTO pageQueryDTO) {
+        PageHelper.startPage(pageQueryDTO.getPage(),pageQueryDTO.getPageSize());
+        Page<OrderVO> records = orderMapper.search(pageQueryDTO);
+
+        if (records == null || records.getTotal() == 0) {
+            return new PageResult(0, new ArrayList<>());
+        }
+
+        List<Long> orderIds = records.stream().map(OrderVO::getId).collect(Collectors.toList());
+
+        List<OrderDetail> orderDetailList = detailMapper.queryByOrdersIds(orderIds);
+
+        Map<Long, List<OrderDetail>> detailMap = orderDetailList.stream()
+                .collect(Collectors.groupingBy(OrderDetail::getOrderId));
+
+        for (OrderVO orderVO : records) {
+            // 从 Map 中获取当前订单对应的详情列表
+            List<OrderDetail> details = detailMap.get(orderVO.getId());
+
+            // 拼接字符串逻辑
+            if (details != null && !details.isEmpty()) {
+                String dishStr = details.stream()
+                        .map(d -> d.getName() + "*" + d.getNumber())
+                        .collect(Collectors.joining(";"));
+                orderVO.setOrderDishes(dishStr);
+            }
+        }
+
+        return new PageResult(records.getTotal(),records.getResult());
     }
 }

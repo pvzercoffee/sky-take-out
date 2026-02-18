@@ -1,22 +1,20 @@
 package com.sky.controller.admin;
 
 
-import com.sky.dto.OrdersSubmitDTO;
+import com.github.pagehelper.Page;
+import com.sky.dto.OrdersPageQueryDTO;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
-import com.sky.vo.OrderSubmitVO;
 import com.sky.vo.OrderVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
- * 店铺管理
+ * 订单管理
  */
 @Api(tags = "订单相关接口")
 @RestController("adminOrderController")
@@ -28,18 +26,18 @@ public class OrderController {
     OrderService orderService;
 
     /**
-     * 用户下单
-     * @param submitDTO
+     * 订单搜索
+     * @param pageQueryDTO
      * @return
      */
-    @PostMapping("/submit")
-    @ApiOperation("用户下单")
-    public Result<OrderSubmitVO> submit(@RequestBody OrdersSubmitDTO submitDTO){
+    @GetMapping("/conditionSearch")
+    @ApiOperation("订单搜索")
+    public Result<PageResult> page(OrdersPageQueryDTO pageQueryDTO){
 
-        log.info("用户下单：{}",submitDTO);
-        OrderSubmitVO submitVO = orderService.submit(submitDTO);
+        log.info("订单搜索：{}",pageQueryDTO);
+        PageResult pageResult = orderService.conditionSearch(pageQueryDTO);
 
-        return Result.success(submitVO);
+        return Result.success(pageResult);
 
     }
 }

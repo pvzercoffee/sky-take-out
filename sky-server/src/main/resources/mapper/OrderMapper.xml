@@ -59,4 +59,27 @@
         </where>
     </select>
 
+    <!-- 订单搜索 -->
+    <select id="search" resultType="com.sky.vo.OrderVO">
+        select o.* from orders o
+        left join order_detail od on o.id = o.id = od.order_id
+        <where>
+            <if test="beginTime != null">
+                and o.order_time >= #{beginTime}
+            </if>
+            <if test="endTime != null">
+                and o.order_time &lt;= #{endTime}
+            </if>
+            <if test="number != null">
+                and o.number like concat('%',#{number},'%')
+            </if>
+            <if test="phone != null">
+                and o.phone = #{phone}
+            </if>
+            <if test="status != null">
+                and o.status = #{status}
+            </if>
+        </where>
+    </select>
+
 </mapper>
