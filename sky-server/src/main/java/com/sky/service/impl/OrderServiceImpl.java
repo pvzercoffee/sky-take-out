@@ -444,4 +444,23 @@ public class OrderServiceImpl implements OrderService {
 
         orderMapper.update(change);
     }
+
+    /**
+     * 各个状态的订单数量统计
+     * @return
+     */
+    @Override
+    public OrderStatisticsVO statistics() {
+
+        Integer confirmed = orderMapper.countStatus(Orders.CONFIRMED);
+        Integer deliveryInProgress = orderMapper.countStatus(Orders.DELIVERY_IN_PROGRESS);
+        Integer toBeConfirmed = orderMapper.countStatus(Orders.TO_BE_CONFIRMED);
+
+        OrderStatisticsVO statisticsVO = new OrderStatisticsVO();
+        statisticsVO.setConfirmed(confirmed);
+        statisticsVO.setDeliveryInProgress(deliveryInProgress);
+        statisticsVO.setToBeConfirmed(toBeConfirmed);
+
+        return statisticsVO;
+    }
 }

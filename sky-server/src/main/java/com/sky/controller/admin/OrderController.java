@@ -9,6 +9,7 @@ import com.sky.dto.OrdersRejectionDTO;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
+import com.sky.vo.OrderStatisticsVO;
 import com.sky.vo.OrderVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -124,5 +125,17 @@ public class OrderController {
         log.info("完成订单：{}",id);
         orderService.complete(id);
         return Result.success();
+    }
+
+    /**
+     * 各个状态的订单数量统计
+     * @return
+     */
+    @GetMapping("/statistics")
+    @ApiOperation("各个状态的订单数量统计")
+    public Result<OrderStatisticsVO> statistics(){
+        log.info("各个状态的订单数量统计...");
+        OrderStatisticsVO result = orderService.statistics();
+        return Result.success(result);
     }
 }
