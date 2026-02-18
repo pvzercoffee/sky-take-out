@@ -40,4 +40,18 @@ public class OrderController {
         return Result.success(pageResult);
 
     }
+
+    /**
+     * 查看订单详情
+     * @param id
+     * @return
+     */
+    @GetMapping("/details/{id}")
+    @ApiOperation("查看订单详情")
+    public Result<OrderVO> details(@PathVariable Long id){
+        log.info("查看订单详情:{}",id);
+        OrderVO orderVO =  orderService.queryDetail(id);
+
+        return Result.success(orderVO);
+    }
 }

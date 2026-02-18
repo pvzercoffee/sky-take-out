@@ -208,11 +208,15 @@ public class OrderServiceImpl implements OrderService {
     public OrderVO queryDetail(Long id) {
         Orders orders = Orders.builder()
                 .id(id)
-                .userId(BaseContext.getCurrentId())
                 .build();
 
         OrderVO detail = orderMapper.query(orders);
-        detail.setOrderDetailList(detailMapper.queryByOrdersId(id));
+
+        List<OrderDetail> orderDetailList = detailMapper.queryByOrdersId(id);
+
+        if(orderDetailList != null || !orderDetailList.isEmpty()){
+            detail.setOrderDetailList(orderDetailList);
+        }
 
         return detail;
     }
@@ -289,6 +293,7 @@ public class OrderServiceImpl implements OrderService {
      * @param pageQueryDTO
      * @return
      */
+    //TODO:参考
     @Override
     public PageResult conditionSearch(OrdersPageQueryDTO pageQueryDTO) {
         PageHelper.startPage(pageQueryDTO.getPage(),pageQueryDTO.getPageSize());
@@ -298,6 +303,18 @@ public class OrderServiceImpl implements OrderService {
             return new PageResult(0, new ArrayList<>());
         }
 
+        pushOrderDishes(records);
+
+        return new PageResult(records.getTotal(),records.getResult());
+    }
+
+
+
+    /**
+     * 填充的订单的OrderDishes
+     * @param records
+     */
+    private void pushOrderDishes(List<OrderVO> records){
         List<Long> orderIds = records.stream().map(OrderVO::getId).collect(Collectors.toList());
 
         List<OrderDetail> orderDetailList = detailMapper.queryByOrdersIds(orderIds);
@@ -318,6 +335,5 @@ public class OrderServiceImpl implements OrderService {
             }
         }
 
-        return new PageResult(records.getTotal(),records.getResult());
     }
 }
