@@ -5,10 +5,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.sky.constant.MessageConstant;
 import com.sky.context.BaseContext;
-import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.dto.OrdersPaymentDTO;
-import com.sky.dto.OrdersRejectionDTO;
-import com.sky.dto.OrdersSubmitDTO;
+import com.sky.dto.*;
 import com.sky.entity.*;
 import com.sky.exception.AddressBookBusinessException;
 import com.sky.exception.OrderBusinessException;
@@ -22,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -254,38 +250,16 @@ public class OrderServiceImpl implements OrderService {
      * @param id
      */
     @Override
-    public void cancel(Long id) throws Exception {
+    public void cancelFromUser(Long id) throws Exception {
         //根据id查询订单
         Orders param = new Orders();
         param.setId(id);
         Orders orders = orderMapper.query(param);
 
-        if(orders == null){
-            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
-        }
-        if(orders.getStatus() > 2){
-            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
-        }
+        checkAndPopulate(orders,param);
 
-        Orders updateParam = new Orders();
-        updateParam.setId(param.getId());
-
-        if(orders.getPayStatus().equals(Orders.PAID)){
-            //调用微信支付退款接口
-//            weChatPayUtil.refund(
-//                    orders.getNumber(), //商户订单号
-//                    orders.getNumber(), //商户退款单号
-//                    new BigDecimal(0.01),//退款金额，单位 元
-//                    new BigDecimal(0.01));//原订单金额
-//
-//            updateParam.setPayStatus(Orders.REFUND);
-        }
-
-        updateParam.setStatus(Orders.CANCELLED);
-        updateParam.setCancelTime(LocalDateTime.now());
-        updateParam.setCancelReason("用户取消");
-
-        orderMapper.update(updateParam);
+        param.setCancelReason("用户取消");
+        orderMapper.update(param);
 
     }
 
@@ -357,23 +331,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     /**
-     * 商家拒单
-     * @param rejectionDTO
+     * 取消订单异常校验与更新填充
+     * @param target
+     * @param change
+     * @return
      */
-    @Override
-    public void rejection(OrdersRejectionDTO rejectionDTO) throws Exception{
-
-        Orders orders = new Orders();
-        orders.setId(rejectionDTO.getId());
-
-        Orders result  = orderMapper.query(orders);
-        if(result == null){
+    private void checkAndPopulate(Orders target, Orders change){
+        if(target == null){
             throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
         }
-        if(result.getStatus() != Orders.TO_BE_CONFIRMED && result.getStatus() !=  Orders.PENDING_PAYMENT){
+        if(!target.getStatus().equals(Orders.TO_BE_CONFIRMED) && !target.getStatus().equals(Orders.CONFIRMED)){
             throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
         }
-        if(result.getStatus() == Orders.TO_BE_CONFIRMED){
+        if(target.getPayStatus().equals(Orders.PAID)){
             //调用微信支付退款接口
 //            weChatPayUtil.refund(
 //                    result.getNumber(), //商户订单号
@@ -381,12 +351,49 @@ public class OrderServiceImpl implements OrderService {
 //                    new BigDecimal(0.01),//退款金额，单位 元
 //                    new BigDecimal(0.01));//原订单金额
 
-            orders.setPayStatus(Orders.REFUND);
+            change.setPayStatus(Orders.REFUND);
         }
-        orders.setRejectionReason(rejectionDTO.getRejectionReason());
-        orders.setStatus(Orders.CANCELLED);
-        orders.setCancelTime(LocalDateTime.now());
+        change.setStatus(Orders.CANCELLED);
+        change.setCancelTime(LocalDateTime.now());
 
-        orderMapper.update(orders);
+    }
+
+    /**
+     * 商家拒单
+     * @param rejectionDTO
+     */
+    @Transactional
+    @Override
+    public void rejection(OrdersRejectionDTO rejectionDTO) throws Exception{
+
+        Orders change = new Orders();
+        change.setId(rejectionDTO.getId());
+
+        Orders target  = orderMapper.query(change);
+
+        checkAndPopulate(target,change);
+        change.setRejectionReason(rejectionDTO.getRejectionReason());
+
+        orderMapper.update(change);
+    }
+
+    /**
+     * 商家取消拒单
+     * @param cancelDTO
+     */
+    @Transactional
+    @Override
+    public void cancelFromAdmin(OrdersCancelDTO cancelDTO) {
+        Orders change = new Orders();
+        change.setId(cancelDTO.getId());
+
+        Orders target  = orderMapper.query(change);
+
+        checkAndPopulate(target, change);
+
+
+        change.setCancelReason(cancelDTO.getCancelReason());
+
+        orderMapper.update(change);
     }
 }

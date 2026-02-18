@@ -3,7 +3,6 @@ package com.sky.controller.user;
 
 import com.sky.dto.OrdersPaymentDTO;
 import com.sky.dto.OrdersSubmitDTO;
-import com.sky.entity.Orders;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.OrderService;
@@ -15,8 +14,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 订单管理
@@ -110,7 +107,7 @@ public class OrderController {
     @ApiOperation("取消订单")
     public Result cancel(@PathVariable Long id) throws Exception {
         log.info("用户取消订单:{}",id);
-        orderService.cancel(id);
+        orderService.cancelFromUser(id);
         return Result.success();
     }
 
