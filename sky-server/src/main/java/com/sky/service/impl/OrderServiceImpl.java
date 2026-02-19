@@ -487,5 +487,22 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void reminder(Long id) {
         Orders orders = orderMapper.queryById(id);
+
+        if(orders == null){
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+
+        if(!orders.getStatus().equals(Orders.TO_BE_CONFIRMED) || !orders.getPayStatus().equals(Orders.PAID)){
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        Map map = new HashMap();
+        map.put("type",2);    //1表示来单提醒，2表示客户催单
+        map.put("orderId",id);
+        map.put("content","订单号："+orders.getNumber());
+
+        String json = JSONObject.toJSONString(map);
+
+        socketServer.sendToAllClient(json);
     }
 }
