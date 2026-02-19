@@ -219,11 +219,11 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public OrderVO queryDetail(Long id) {
-        Orders orders = Orders.builder()
-                .id(id)
-                .build();
 
-        OrderVO detail = orderMapper.query(orders);
+        Orders orders = orderMapper.queryById(id);
+
+        OrderVO detail = new OrderVO();
+        BeanUtils.copyProperties(orders,detail);
 
         List<OrderDetail> orderDetailList = detailMapper.queryByOrdersId(id);
 
@@ -270,7 +270,7 @@ public class OrderServiceImpl implements OrderService {
         //根据id查询订单
         Orders param = new Orders();
         param.setId(id);
-        Orders orders = orderMapper.query(param);
+        Orders orders = orderMapper.queryById(id);
 
         checkAndPopulate(orders,param);
 
@@ -334,7 +334,7 @@ public class OrderServiceImpl implements OrderService {
         Orders orders = new Orders();
         orders.setId(id);
 
-        Orders result  = orderMapper.query(orders);
+        Orders result  = orderMapper.queryById(id);
         if(result == null){
             throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
         }
@@ -385,7 +385,7 @@ public class OrderServiceImpl implements OrderService {
         Orders change = new Orders();
         change.setId(rejectionDTO.getId());
 
-        Orders target  = orderMapper.query(change);
+        Orders target  = orderMapper.queryById(rejectionDTO.getId());
 
         checkAndPopulate(target,change);
         change.setRejectionReason(rejectionDTO.getRejectionReason());
@@ -403,7 +403,7 @@ public class OrderServiceImpl implements OrderService {
         Orders change = new Orders();
         change.setId(cancelDTO.getId());
 
-        Orders target  = orderMapper.query(change);
+        Orders target  = orderMapper.queryById(cancelDTO.getId());
 
         checkAndPopulate(target, change);
 
@@ -422,7 +422,7 @@ public class OrderServiceImpl implements OrderService {
         Orders change = new Orders();
         change.setId(id);
 
-        Orders target  = orderMapper.query(change);
+        Orders target  = orderMapper.queryById(id);
 
         if(target == null){
             throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
@@ -446,7 +446,7 @@ public class OrderServiceImpl implements OrderService {
         Orders change = new Orders();
         change.setId(id);
 
-        Orders target  = orderMapper.query(change);
+        Orders target  = orderMapper.queryById(id);
 
         if(target == null){
             throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
@@ -478,5 +478,14 @@ public class OrderServiceImpl implements OrderService {
         statisticsVO.setToBeConfirmed(toBeConfirmed);
 
         return statisticsVO;
+    }
+
+    /**
+     * 用户催单
+     * @param id
+     */
+    @Override
+    public void reminder(Long id) {
+        Orders orders = orderMapper.queryById(id);
     }
 }
