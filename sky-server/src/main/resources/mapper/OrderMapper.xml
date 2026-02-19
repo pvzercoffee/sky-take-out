@@ -82,4 +82,17 @@
         </where>
     </select>
 
+
+    <select id="turnoverStatistics" resultType="com.sky.entity.TurnoverReport">
+        SELECT
+        DATE(order_time) AS orderDate,
+        IFNULL(SUM(amount), 0.0) AS turnover
+        FROM orders
+        WHERE status = 5
+        AND order_time &gt;= #{begin}
+        AND order_time &lt;= #{end}
+        GROUP BY DATE(order_time);
+
+    </select>
+
 </mapper>
