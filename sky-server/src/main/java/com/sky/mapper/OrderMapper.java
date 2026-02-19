@@ -4,14 +4,13 @@ import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.Orders;
 import com.sky.entity.TurnoverReport;
+import com.sky.entity.UserReport;
 import com.sky.vo.OrderVO;
-import com.sky.vo.TurnoverReportVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface OrderMapper {
@@ -86,4 +85,22 @@ public interface OrderMapper {
      * @return
      */
     List<TurnoverReport> turnoverStatistics(LocalDateTime begin, LocalDateTime end);
+
+    /**
+     * 新增用户统计
+     * @param begin
+     * @param end
+     * @return
+     */
+    List<UserReport> userNewStatistics(LocalDateTime begin, LocalDateTime end);
+
+
+    /**
+     * 累计用户统计
+     * @param localDateTime
+     * @return
+     */
+    @Select("select count(*) from user where create_time < #{localDateTime}")
+    Integer userTotalStatistics(LocalDateTime localDateTime);
+
 }

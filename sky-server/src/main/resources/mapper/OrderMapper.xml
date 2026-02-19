@@ -82,7 +82,7 @@
         </where>
     </select>
 
-
+    <!-- 营业额统计 -->
     <select id="turnoverStatistics" resultType="com.sky.entity.TurnoverReport">
         SELECT
         DATE(order_time) AS orderDate,
@@ -94,5 +94,17 @@
         GROUP BY DATE(order_time);
 
     </select>
+
+    <!-- 新用户统计 -->
+    <select id="userNewStatistics" resultType="com.sky.entity.UserReport">
+        select
+            date(create_time) as createDate,
+            IFNULL(count(*),0) as num
+        FROM user
+            where create_time &gt; #{begin} and create_time &lt; #{end}
+        GROUP BY createDate
+    </select>
+
+
 
 </mapper>
