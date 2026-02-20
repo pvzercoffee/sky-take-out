@@ -3,6 +3,7 @@ package com.sky.mapper;
 import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.entity.*;
+import com.sky.vo.OrderOverViewVO;
 import com.sky.vo.OrderReportVO;
 import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -112,4 +113,16 @@ public interface OrderMapper {
     List<OrderReport> orderStatistics(LocalDateTime begin, LocalDateTime end);
 
 
+    /**
+     * 查询订单管理数据
+     * @return
+     */
+    @Select("select " +
+            "count(status) allOrders," +
+            "sum(status=6) cancelledOrders," +
+            "sum(status=5) completedOrders," +
+            "sum(status=3) deliveredOrders," +
+            "sum(status=2) waitingOrders" +
+            " from orders")
+    OrderOverViewVO overview();
 }
