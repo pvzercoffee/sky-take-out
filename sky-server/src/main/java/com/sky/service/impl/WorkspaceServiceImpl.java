@@ -3,7 +3,9 @@ package com.sky.service.impl;
 import com.sky.entity.OrderReport;
 import com.sky.entity.TurnoverReport;
 import com.sky.entity.UserReport;
+import com.sky.mapper.DishMapper;
 import com.sky.mapper.OrderMapper;
+import com.sky.mapper.SetmealMapper;
 import com.sky.service.WorkspaceService;
 import com.sky.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,12 @@ import java.util.List;
 public class WorkspaceServiceImpl implements WorkspaceService {
 
     @Autowired
-    OrderMapper orderMapper;
+    private OrderMapper orderMapper;
+
+    @Autowired
+    private SetmealMapper setmealMapper;
+    @Autowired
+    private DishMapper dishMapper;
 
     /**
      * 查询今日运营数据
@@ -73,7 +80,7 @@ public class WorkspaceServiceImpl implements WorkspaceService {
      */
     @Override
     public SetmealOverViewVO overviewSetmeals() {
-        return null;
+        return setmealMapper.overview();
     }
 
     /**
@@ -81,8 +88,8 @@ public class WorkspaceServiceImpl implements WorkspaceService {
      * @return
      */
     @Override
-    public DishOverViewVO overviewDishes() {
-        return null;
+    public DishOverViewVO overviewDishes(){
+        return dishMapper.overview();
     }
 
     /**

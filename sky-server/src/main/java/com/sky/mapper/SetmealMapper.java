@@ -6,6 +6,7 @@ import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
 import com.sky.enumeration.OperationType;
 import com.sky.vo.DishItemVO;
+import com.sky.vo.SetmealOverViewVO;
 import com.sky.vo.SetmealVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
@@ -96,4 +97,11 @@ public interface SetmealMapper {
             " from setmeal_dish sd  " +
             "left join dish d on d.id = sd.dish_id where sd.setmeal_id = #{setmealId}")
     List<DishItemVO> getDishItemBySetmealId(Long setmealId);
+
+    /**
+     * 查询套餐总览
+     * @return
+     */
+    @Select("select sum(status=1) sold,sum(status=0) discontinued from setmeal")
+    SetmealOverViewVO overview();
 }

@@ -4,7 +4,9 @@ import com.github.pagehelper.Page;
 import com.sky.annotation.AutoFill;
 import com.sky.entity.Dish;
 import com.sky.enumeration.OperationType;
+import com.sky.vo.DishOverViewVO;
 import com.sky.vo.DishVO;
+import com.sky.vo.SetmealOverViewVO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -82,4 +84,11 @@ public interface DishMapper {
      * @return
      */
     List<DishVO> query(Dish dish);
+
+    /**
+     * 查询菜品总览
+     * @return
+     */
+    @Select("select sum(status=1) sold,sum(status=0) discontinued from dish")
+    DishOverViewVO overview();
 }
