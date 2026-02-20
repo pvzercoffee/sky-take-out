@@ -2,9 +2,11 @@ package com.sky.mapper;
 
 import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
+import com.sky.entity.OrderReport;
 import com.sky.entity.Orders;
 import com.sky.entity.TurnoverReport;
 import com.sky.entity.UserReport;
+import com.sky.vo.OrderReportVO;
 import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -103,4 +105,12 @@ public interface OrderMapper {
     @Select("select count(*) from user where create_time < #{localDateTime}")
     Integer userTotalStatistics(LocalDateTime localDateTime);
 
+
+    /**
+     * 订单统计
+     * @param begin
+     * @param end
+     * @return
+     */
+    List<OrderReport> orderStatistics(LocalDateTime begin, LocalDateTime end);
 }
