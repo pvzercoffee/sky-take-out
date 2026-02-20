@@ -118,23 +118,7 @@
 
     </select>
 
-    <!-- top10销量统计 -->
-    <select id="top10" resultType="com.sky.entity.SalesTop10Report">
 
-        select
-        od.name as name,
-        sum(od.number) number
-        from order_detail od,orders o
-
-        where
-        od.order_id = o.id
-        and order_time &gt;= #{begin}
-        and order_time &lt;= #{end}
-        and o.status = 5
-        group by od.name
-        order by number desc
-
-    </select>
 
 
 </mapper>

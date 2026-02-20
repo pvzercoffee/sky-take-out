@@ -6,6 +6,7 @@ import com.sky.entity.OrderReport;
 import com.sky.entity.SalesTop10Report;
 import com.sky.entity.TurnoverReport;
 import com.sky.entity.UserReport;
+import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.service.ReportService;
 import com.sky.vo.OrderReportVO;
@@ -28,10 +29,10 @@ public class ReportServiceImpl implements ReportService {
 
 
     @Autowired
-    OrderMapper orderMapper;
-    @Autowired
-    private EnumTypeDeterminer enumTypeDeterminer;
+    private OrderMapper orderMapper;
 
+    @Autowired
+    private OrderDetailMapper orderDetailMapper;
     /**
      * 营业额统计
      * @param begin
@@ -209,7 +210,7 @@ public class ReportServiceImpl implements ReportService {
 
         //获取到菜品或套餐名称与其对应销量的列表
         PageHelper.startPage(1,10);
-        Page<SalesTop10Report> top10List = orderMapper.top10(beginTime,endTime);
+        Page<SalesTop10Report> top10List = orderDetailMapper.top10(beginTime,endTime);
 
         //把列表转换成<日期,日订单数>的map对
         List<String> nameList = top10List.stream().map(SalesTop10Report::getName).collect(Collectors.toList());

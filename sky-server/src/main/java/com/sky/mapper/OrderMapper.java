@@ -111,11 +111,5 @@ public interface OrderMapper {
      */
     List<OrderReport> orderStatistics(LocalDateTime begin, LocalDateTime end);
 
-    /**
-     * top10销量统计
-     * @param begin
-     * @param end
-     * @return
-     */
-    Page<SalesTop10Report> top10(LocalDateTime begin, LocalDateTime end);
+
 }
