@@ -2,10 +2,7 @@ package com.sky.mapper;
 
 import com.github.pagehelper.Page;
 import com.sky.dto.OrdersPageQueryDTO;
-import com.sky.entity.OrderReport;
-import com.sky.entity.Orders;
-import com.sky.entity.TurnoverReport;
-import com.sky.entity.UserReport;
+import com.sky.entity.*;
 import com.sky.vo.OrderReportVO;
 import com.sky.vo.OrderVO;
 import org.apache.ibatis.annotations.Mapper;
@@ -113,4 +110,12 @@ public interface OrderMapper {
      * @return
      */
     List<OrderReport> orderStatistics(LocalDateTime begin, LocalDateTime end);
+
+    /**
+     * top10销量统计
+     * @param begin
+     * @param end
+     * @return
+     */
+    Page<SalesTop10Report> top10(LocalDateTime begin, LocalDateTime end);
 }

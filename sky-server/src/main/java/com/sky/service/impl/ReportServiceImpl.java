@@ -1,11 +1,15 @@
 package com.sky.service.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.sky.entity.OrderReport;
+import com.sky.entity.SalesTop10Report;
 import com.sky.entity.TurnoverReport;
 import com.sky.entity.UserReport;
 import com.sky.mapper.OrderMapper;
 import com.sky.service.ReportService;
 import com.sky.vo.OrderReportVO;
+import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 import org.apache.commons.lang.StringUtils;
@@ -186,6 +190,34 @@ public class ReportServiceImpl implements ReportService {
                 .totalOrderCount(totalOrderCount)
                 .validOrderCount(validOrderCount)
                 .orderCompletionRate(totalOrderCount == 0 ? 0.0 : (double)validOrderCount/(double)totalOrderCount)
+                .build();
+    }
+
+    /**
+     * top10销量统计
+     * @param begin
+     * @param end
+     * @return
+     */
+    @Override
+    public SalesTop10ReportVO top10(LocalDate begin, LocalDate end) {
+
+        //把LocalDate类转换为LocalDateTime，便于数据库查询
+
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(end,LocalTime.MAX);
+
+        //获取到菜品或套餐名称与其对应销量的列表
+        PageHelper.startPage(1,10);
+        Page<SalesTop10Report> top10List = orderMapper.top10(beginTime,endTime);
+
+        //把列表转换成<日期,日订单数>的map对
+        List<String> nameList = top10List.stream().map(SalesTop10Report::getName).collect(Collectors.toList());
+        List<Integer> numberList = top10List.stream().map(SalesTop10Report::getNumber).collect(Collectors.toList());
+
+        return SalesTop10ReportVO.builder()
+                .nameList(StringUtils.join(nameList,","))
+                .numberList(StringUtils.join(numberList,","))
                 .build();
     }
 }
