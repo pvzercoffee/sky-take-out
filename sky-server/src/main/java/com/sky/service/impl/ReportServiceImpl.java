@@ -9,15 +9,22 @@ import com.sky.entity.UserReport;
 import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.service.ReportService;
-import com.sky.vo.OrderReportVO;
-import com.sky.vo.SalesTop10ReportVO;
-import com.sky.vo.TurnoverReportVO;
-import com.sky.vo.UserReportVO;
+import com.sky.vo.*;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import springfox.documentation.spi.schema.EnumTypeDeterminer;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -33,6 +40,11 @@ public class ReportServiceImpl implements ReportService {
 
     @Autowired
     private OrderDetailMapper orderDetailMapper;
+    @Autowired
+    private WorkspaceServiceImpl workspaceServiceImpl;
+    @Autowired
+    private ReportService reportService;
+
     /**
      * 营业额统计
      * @param begin
@@ -220,5 +232,71 @@ public class ReportServiceImpl implements ReportService {
                 .nameList(StringUtils.join(nameList,","))
                 .numberList(StringUtils.join(numberList,","))
                 .build();
+    }
+
+    /**
+     * 导出运营数据
+     * @param response
+     */
+    @Override
+    public void exportBusniessData(HttpServletResponse response) throws IOException {
+
+        //从数据库查询运营数据
+        LocalDate today = LocalDate.now();
+
+        LocalDateTime begin = LocalDateTime.of(today, LocalTime.MIN).minusDays(30);
+        LocalDateTime end = LocalDateTime.of(today, LocalTime.MAX).minusDays(1);
+
+        //将数据写入excel
+        InputStream input = ClassLoader.getSystemResourceAsStream("template/运营数据报表模板.xlsx");
+        XSSFWorkbook excel = new XSSFWorkbook(input);
+
+        XSSFSheet sheet = excel.getSheetAt(0);
+
+        sheet.getRow(1).getCell(1).setCellValue("时间："+today.minusDays(30)+"到"+today.minusDays(1));
+
+        end = end.minusDays(30);
+
+        Double turnoverTotal = 0.0;
+        Double orderCompletionRateTotal = 0.0;
+        Integer newUseresTotal = 0;
+        Integer validOrderCountTotal = 0;
+        Long totalOrderCount = 0L;
+        Double unitPriceTotal = 0.0;
+
+        for(int i = 0; i < 30; i++){
+
+            BusinessDataVO data = workspaceServiceImpl.businessData(begin.plusDays(i),end.plusDays(i+1));
+
+            turnoverTotal += data.getTurnover();
+            newUseresTotal += data.getNewUsers();
+            validOrderCountTotal += data.getValidOrderCount();
+            unitPriceTotal += data.getUnitPrice();
+            totalOrderCount += Math.round(data.getOrderCompletionRate() == 0 ? 0 :data.getValidOrderCount()/data.getOrderCompletionRate());
+
+            sheet.getRow(7+i).getCell(1).setCellValue(today.minusDays(30-i).toString());
+            sheet.getRow(7+i).getCell(2).setCellValue(data.getTurnover());
+            sheet.getRow(7+i).getCell(3).setCellValue(data.getValidOrderCount());
+            sheet.getRow(7+i).getCell(4).setCellValue(data.getOrderCompletionRate());
+            sheet.getRow(7+i).getCell(5).setCellValue(data.getUnitPrice());
+            sheet.getRow(7+i).getCell(6).setCellValue(data.getNewUsers());
+
+        }
+
+        unitPriceTotal =  validOrderCountTotal == 0 ? 0.0 :  turnoverTotal/validOrderCountTotal;
+        orderCompletionRateTotal =totalOrderCount == 0 ? 0.0 : (double) validOrderCountTotal/ totalOrderCount;
+
+        sheet.getRow(3).getCell(2).setCellValue(turnoverTotal);
+        sheet.getRow(3).getCell(4).setCellValue(orderCompletionRateTotal);
+        sheet.getRow(3).getCell(6).setCellValue(newUseresTotal);
+        sheet.getRow(4).getCell(2).setCellValue(validOrderCountTotal);
+        sheet.getRow(4).getCell(4).setCellValue(unitPriceTotal);
+
+
+        //写入浏览器输出流
+        ServletOutputStream output = response.getOutputStream();
+        excel.write(output);
+        excel.close();
+        output.close();
     }
 }

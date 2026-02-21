@@ -28,18 +28,15 @@ public class WorkspaceServiceImpl implements WorkspaceService {
     private DishMapper dishMapper;
 
     /**
-     * 查询今日运营数据
+     * 查询运营数据
      * @return
      */
     @Override
-    public BusinessDataVO businessData() {
-
-        LocalDateTime begin = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
-        LocalDateTime end = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+    public BusinessDataVO businessData(LocalDateTime begin, LocalDateTime end) {
 
         List<TurnoverReport> reportList = orderMapper.turnoverStatistics(begin,end);
 
-        //查询当日营业额
+        //查询营业额
         Double turnover = 0.0;
         if(reportList != null && !reportList.isEmpty()){
             turnover = reportList.get(0).getTurnover();

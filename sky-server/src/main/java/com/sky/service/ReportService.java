@@ -4,7 +4,10 @@ import com.sky.vo.OrderReportVO;
 import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
+import org.apache.http.protocol.HTTP;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDate;
 
 
@@ -41,4 +44,10 @@ public interface ReportService {
      * @return
      */
     SalesTop10ReportVO top10(LocalDate begin, LocalDate end);
+
+    /**
+     * 导出运营数据
+     * @param response
+     */
+    void exportBusniessData(HttpServletResponse response) throws IOException;
 }
